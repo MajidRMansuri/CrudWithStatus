@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Update Registration Form</h1>  
+    <form method="post" action="{% url 'update_form_data' %}">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Name" value="{{profile_data.Name}}" required><br><br>
+        <input type="email" name="email" placeholder="Email" value="{{profile_data.Email}}" required><br><br>
+        <input type="password" name="password" placeholder="Password" value="{{profile_data.Password}}" required><br><br>
+        <input type="submit"><br><br>
+    </form>
+    <br><br><a href="{% url 'login_page' %}">Login Page</a>
+</body>
+</html>

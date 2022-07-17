@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function()
+        {
+            $('.chkcvalues').click(function()
+            {
+                var txt="";
+                $('.chkcvalues:ckecked').each(function()
+                {
+                    txt+=$(this).val()+","
+                });
+                txt=txt.substring(0,txt.length-1);
+                $('#txtvalues').val(txt);
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Registration Form</h1>  
+    <form method="post" action="{% if edit_user_item %}{% url 'edit_item' pk=edit_user_item.id %}{% else %}{% url 'form_data' %}{% endif %}">
+        {% csrf_token %}
+        <input type="text" name="name" value="{{edit_user_item.Name}}" placeholder="Name" required><br><br>
+        <input type="email" name="email" value="{{edit_user_item.Email}}" placeholder="Email"required><br><br>
+        <input type="password" name="password" placeholder="Password" value="{{edit_user_item.Password}}" required><br><br>
+        <select name="status" id="cars">
+            {% for status in status %}
+                <option value="{{status.Status}}">{{status.Status}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="{% if edit_user_item %}Edit Details{% else %} Registration {% endif %}"><br><br>
+    </form>
+    <br><br><a href="{% url 'login_page' %}">Login Page</a>
+    <br><br>
+    <table >
+        <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Todo</th>
+            <th>Status</th>
+            <th>Password</th>
+            <th>Status</th>
+            <th>Update</th>
+            {% comment %} <th>Delete</th> {% endcomment %}
+        </tr><form method='post'  >{% csrf_token %}
+        {% for d in user_items %}
+        
+        <tr {% for status in status %}{% if d.Status.Status == 'pending' %}style='background-color:red;'{% else %} style='background-color:green;' {% endif %}{% endfor %} >
+            
+                <td>
+                    
+                </td>
+                <td>{{d.id}}</td>
+                <td>{% if edit_user_item %}{% url 'edit_item' pk=d.id %}<input type="text" name="name" value="{{edit_user_item.Name}}" required>{% else %} {{d.Name}}{% endif %}</td>
+                <td>{{d.Email}}</td>
+                <td>{{d.Password}}</td>
+                <td>{% if d.Status.Status == 'pending' %}
+                    
+                    <select style='background-color:red;' name="status" id="cars">
+                        {% for status in status %}
+                            <option value="{{status.Status}}">{{status.Status}}</option>
+                        {% endfor %}
+                    </select>
+                    
+                    {% else %}
+                        {{d.Status.Status}}
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'edit_item' pk=d.id %}">Update</a></td>  
+                {% comment %} <td><a href="{% url 'remove_item' pk=d.id %}">Delete</a></td> {% endcomment %}
+                
+            
+        </tr>
+        {% endfor %}   
+        
+        <input type='submit'></form>
+    </table>
+    <form method='POST' action='{% url 'savevalues' %}' >
+        {% csrf_token %}
+        <input type='checkbox' value='Python' class="chkcvalues" />Python
+        <input type='checkbox' value='js' class="chkcvalues" />JS
+        <input type='checkbox' value='java' class="chkcvalues" />Java
+        <input type='checkbox' value='db' class="chkcvalues" />DB
+        <hr/>
+        <input type='text' name='coursename' id='txtvalues' />
+        <input id='but1' type='submit' value='insert' />
+    </form>
+</body>
+</html>
